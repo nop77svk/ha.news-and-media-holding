@@ -3,16 +3,16 @@ namespace WeatherServer.Api.Controllers;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("[controller]")]
-public class WeatherForecastController : ControllerBase
+[Route("/api/temperature")]
+public class TemperatureController : ControllerBase
 {
     private static readonly string[] Summaries =
     [
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     ];
 
-    [HttpGet(Name = "GetWeatherForecast")]
-    public IEnumerable<WeatherForecast> Get()
+    [HttpGet("{cityName}")]
+    public IEnumerable<WeatherForecast> Get([FromRoute] string cityName)
     {
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
