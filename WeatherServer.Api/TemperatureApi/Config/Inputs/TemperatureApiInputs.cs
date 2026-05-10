@@ -1,4 +1,4 @@
-namespace WeatherServer.Api.TemperatureApi.Config;
+namespace WeatherServer.Api.TemperatureApi.Config.Inputs;
 
 public sealed class TemperatureApiInputs
 {

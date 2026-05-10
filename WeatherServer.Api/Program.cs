@@ -7,15 +7,7 @@ public static class Program
     public static void Main(string[] args)
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-
-        builder.Services.Configure<TemperatureApiConfig>(
-            builder.Configuration.GetSection(nameof(TemperatureApiConfig)),
-            binderOptions =>
-            {
-                binderOptions.ErrorOnUnknownConfiguration = true;
-                binderOptions.BindNonPublicProperties = false;
-            }
-        );
+        ConfigureConfiguration(builder);
 
         // Add services to the container.
         builder.Services.AddControllers();
@@ -30,5 +22,38 @@ public static class Program
         app.MapControllers();
 
         app.Run();
+    }
+
+    private static void ConfigureConfiguration(WebApplicationBuilder builder)
+    {
+        IConfigurationSection appConfigBase = builder.Configuration.GetSection(nameof(TemperatureApiConfig));
+
+        builder.Services.Configure<TemperatureApi.Config.Inputs.TemperatureApiInputs>(
+            appConfigBase.GetSection(nameof(TemperatureApi.Config.Inputs)),
+            binderOptions =>
+            {
+                binderOptions.ErrorOnUnknownConfiguration = true;
+                binderOptions.BindNonPublicProperties = false;
+            }
+        );
+
+        builder.Services.Configure<TemperatureApi.Config.WeatherService.TemperatureApiWeatherServiceConfig>(
+            appConfigBase.GetSection(nameof(TemperatureApi.Config.WeatherService)),
+            binderOptions =>
+            {
+                binderOptions.ErrorOnUnknownConfiguration = true;
+                binderOptions.BindNonPublicProperties = false;
+            }
+        );
+
+        builder.Services.Configure<TemperatureApi.Config.Outputs.TemperatureApiOutputs>(
+            appConfigBase.GetSection(nameof(TemperatureApi.Config.Outputs)),
+            binderOptions =>
+            {
+                binderOptions.ErrorOnUnknownConfiguration = true;
+                binderOptions.BindNonPublicProperties = false;
+            }
+        );
+
     }
 }
