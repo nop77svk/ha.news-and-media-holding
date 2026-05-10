@@ -1,10 +1,15 @@
 namespace WeatherServer.Api;
 
+using WeatherServer.Api.TemperatureApi.Config;
+
 public static class Program
 {
     public static void Main(string[] args)
     {
-        var builder = WebApplication.CreateBuilder(args);
+        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+        TemperatureApiConfig temperatureApiConfig = builder.Configuration.Get<TemperatureApiConfig>()
+            ?? throw new TemperatureApiConfigException($"Failed to read the {nameof(TemperatureApiConfig)} app configuration tree");
 
         // Add services to the container.
         builder.Services.AddControllers();

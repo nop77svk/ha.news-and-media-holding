@@ -1,4 +1,4 @@
-namespace WeatherServer.Api.Controllers;
+namespace WeatherServer.Api.TemperatureApi;
 
 using Microsoft.AspNetCore.Mvc;
 
