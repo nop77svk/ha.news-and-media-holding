@@ -22,7 +22,7 @@ public class TemperatureController : ControllerBase
     }
 
     [HttpGet("{cityName}")]
-    public async Task<ActionResult<string>> Get([FromRoute] string cityName, CancellationToken cancellationToken)
+    public async Task<ActionResult<string>> GetTemperature([FromRoute] string cityName, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
