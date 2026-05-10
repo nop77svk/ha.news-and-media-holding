@@ -3,10 +3,11 @@ namespace WeatherServer.Api.TemperatureApi;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
+using WeatherServer.Api.Infrastructure;
 using WeatherServer.Api.TemperatureApi.Config;
 
 [ApiController]
-[Route("/api/temperature")]
+[Route(ApiConstants.TemperatureApiRoot)]
 public class TemperatureController : ControllerBase
 {
     private readonly IOptions<TemperatureApiConfig> _config;
