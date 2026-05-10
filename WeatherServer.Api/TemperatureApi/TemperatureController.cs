@@ -22,8 +22,10 @@ public class TemperatureController : ControllerBase
     }
 
     [HttpGet("{cityName}")]
-    public ActionResult<string> Get([FromRoute] string cityName)
+    public async Task<ActionResult<string>> Get([FromRoute] string cityName, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         if (!_config.Value.Inputs.Cities.Contains(cityName, StringComparer.InvariantCultureIgnoreCase))
         {
             return NotFound($"City `{cityName}` not recognised");
