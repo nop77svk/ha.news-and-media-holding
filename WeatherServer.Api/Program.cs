@@ -8,8 +8,14 @@ public static class Program
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-        TemperatureApiConfig temperatureApiConfig = builder.Configuration.Get<TemperatureApiConfig>()
-            ?? throw new TemperatureApiConfigException($"Failed to read the {nameof(TemperatureApiConfig)} app configuration tree");
+        builder.Services.Configure<TemperatureApiConfig>(
+            builder.Configuration.GetSection(nameof(TemperatureApiConfig)),
+            binderOptions =>
+            {
+                binderOptions.ErrorOnUnknownConfiguration = true;
+                binderOptions.BindNonPublicProperties = false;
+            }
+        );
 
         // Add services to the container.
         builder.Services.AddControllers();

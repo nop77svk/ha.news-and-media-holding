@@ -1,25 +1,29 @@
 namespace WeatherServer.Api.TemperatureApi;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+
+using WeatherServer.Api.TemperatureApi.Config;
 
 [ApiController]
 [Route("/api/temperature")]
 public class TemperatureController : ControllerBase
 {
-    private static readonly string[] Summaries =
-    [
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    ];
+    private readonly IOptions<TemperatureApiConfig> _config;
+
+    public TemperatureController(IOptions<TemperatureApiConfig> config)
+    {
+        _config = config;
+    }
 
     [HttpGet("{cityName}")]
-    public IEnumerable<WeatherForecast> Get([FromRoute] string cityName)
+    public ActionResult<decimal> Get([FromRoute] string cityName)
     {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        if (!_config.Value.Inputs.Cities.Contains(cityName, StringComparer.InvariantCultureIgnoreCase))
         {
-            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        })
-        .ToArray();
+            return NotFound($"City `{cityName}` not recognised");
+        }
+
+        return Ok(-1);
     }
 }
