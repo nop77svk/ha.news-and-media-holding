@@ -25,11 +25,11 @@ public static class Program
             httpClient.Timeout = TimeSpan.FromMilliseconds(options.Value.TimeoutMS);
         });
 
-        builder.Services.AddScoped<IExternalWeatherApiClient, GenericConfigurableWeatherApiClient>(serviceProvider =>
+        builder.Services.AddScoped<IExternalWeatherApiClient>(serviceProvider =>
         {
             HttpClient httpClient = serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient("ExternalWeatherApiClient");
-            var weatherServiceConfigOptions = serviceProvider.GetRequiredService<IOptions<TemperatureApi.Config.WeatherService.TemperatureApiWeatherServiceConfig>>();
-            return new GenericConfigurableWeatherApiClient(httpClient, weatherServiceConfigOptions);
+            var options = serviceProvider.GetRequiredService<IOptions<TemperatureApi.Config.WeatherService.TemperatureApiWeatherServiceConfig>>();
+            return new GenericConfigurableWeatherApiClient(httpClient, options);
         });
 
         var app = builder.Build();

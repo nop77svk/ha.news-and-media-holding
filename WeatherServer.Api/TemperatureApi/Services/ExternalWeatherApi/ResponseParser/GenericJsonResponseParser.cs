@@ -1,4 +1,4 @@
-namespace WeatherServer.Api.TemperatureApi.Services.ResponseParser;
+namespace WeatherServer.Api.TemperatureApi.Services.ExternalWeatherApi.ResponseParser;
 
 using System.Globalization;
 using System.Text.Json;

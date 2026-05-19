@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using Json.Path;
 using Microsoft.Extensions.Options;
 using WeatherServer.Api.Infrastructure;
-using WeatherServer.Api.TemperatureApi.Services.ResponseParser;
+using WeatherServer.Api.TemperatureApi.Services.ExternalWeatherApi.ResponseParser;
 
 public class GenericConfigurableWeatherApiClient
     : IExternalWeatherApiClient
