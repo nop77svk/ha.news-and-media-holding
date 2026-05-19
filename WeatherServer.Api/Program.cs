@@ -1,6 +1,9 @@
 namespace WeatherServer.Api;
 
+using Microsoft.Extensions.Http;
+using Microsoft.Extensions.Options;
 using WeatherServer.Api.TemperatureApi.Config;
+using WeatherServer.Api.TemperatureApi.Services.ExternalWeatherApi;
 
 public static class Program
 {
@@ -13,6 +16,14 @@ public static class Program
         builder.Services.AddControllers();
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
+
+        builder.Services.AddHttpClient("ExternalWeatherApiClient", (serviceProvider, httpClient) =>
+        {
+            var options = serviceProvider.GetService<IOptions<TemperatureApi.Config.WeatherService.TemperatureApiWeatherServiceConfig>>()
+                ?? throw new InvalidOperationException("Unable to retrieve the external weather API configuration.");
+
+            httpClient.Timeout = TimeSpan.FromMilliseconds(options.Value.TimeoutMS);
+        });
 
         var app = builder.Build();
 
@@ -54,6 +65,5 @@ public static class Program
                 binderOptions.BindNonPublicProperties = false;
             }
         );
-
     }
 }
