@@ -26,6 +26,7 @@ public class GenericConfigurableWeatherApiClient
         Uri uri = GetExternalWeatherServiceUri(cityName);
         Stream extApiResponse = await _httpClient.GetStreamAsync(uri, cancellationToken);
 
+        // 2do! inject parser via DI if we want to support multiple APIs with different response formats; resolve the constructor dependency on Stream first
         IExternalWeatherApiResponseParser responseParser = new GenericJsonResponseParser(extApiResponse, _weatherServiceConfig);
         decimal temperature = await responseParser.GetTemperatureAsync(cancellationToken);
         DateTime measuredTimeStamp = await responseParser.GetMeasuredTimeStampAsync(cancellationToken);
