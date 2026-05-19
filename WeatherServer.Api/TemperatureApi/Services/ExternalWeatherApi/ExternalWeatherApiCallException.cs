@@ -1,4 +1,4 @@
-namespace WeatherServer.Api.TemperatureApi.Config.WeatherService;
+namespace WeatherServer.Api.TemperatureApi.Services.ExternalWeatherApi;
 
 public class ExternalWeatherApiCallException : Exception
 {

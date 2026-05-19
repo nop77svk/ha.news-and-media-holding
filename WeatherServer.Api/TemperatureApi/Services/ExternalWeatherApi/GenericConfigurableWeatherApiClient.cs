@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 using Json.Path;
 using Microsoft.Extensions.Options;
 using WeatherServer.Api.Infrastructure;
-using WeatherServer.Api.TemperatureApi.Config.WeatherService;
 
 public class GenericConfigurableWeatherApiClient
     : IExternalWeatherApiClient
@@ -36,8 +35,8 @@ public class GenericConfigurableWeatherApiClient
 
     public async Task<ExternalWeatherApiData> GetCurrentWeatherDataAsync(string cityName, CancellationToken cancellationToken)
     {
-        Uri extApiUri = GetExternalWeatherServiceUri(cityName);
-        Stream extApiResponse = await _httpClient.GetStreamAsync(extApiUri, cancellationToken);
+        Uri uri = GetExternalWeatherServiceUri(cityName);
+        Stream extApiResponse = await _httpClient.GetStreamAsync(uri, cancellationToken);
 
         JsonNode extApiResponseJson = await JsonNode.ParseAsync(extApiResponse, cancellationToken: cancellationToken)
             ?? throw new ExternalWeatherApiCallException("External Weather API response could not be parsed as JSON.");
@@ -52,7 +51,7 @@ public class GenericConfigurableWeatherApiClient
         DateTime result;
 
         bool isMeasureTimeStampConfigValueUnixEpochSeconds = _rxStripSpecialCharacters.Replace(_weatherServiceConfig.Value.ApiResponseToResponse.MeasureTimeStampFormat, string.Empty)
-            .Equals(TemperatureApiWeatherServiceResponseMapConfig.MeasureTimeStampFormatUnixEpoch, StringComparison.OrdinalIgnoreCase);
+            .Equals(Config.WeatherService.TemperatureApiWeatherServiceResponseMapConfig.MeasureTimeStampFormatUnixEpoch, StringComparison.OrdinalIgnoreCase);
 
         var jsonNodeValue = _measuredTimeStampJsonPath?.Evaluate(extApiResponseJson)
             ?.Matches
