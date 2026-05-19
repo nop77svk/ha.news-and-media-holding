@@ -25,6 +25,13 @@ public static class Program
             httpClient.Timeout = TimeSpan.FromMilliseconds(options.Value.TimeoutMS);
         });
 
+        builder.Services.AddScoped<IExternalWeatherApiClient, GenericConfigurableWeatherApiClient>(serviceProvider =>
+        {
+            HttpClient httpClient = serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient("ExternalWeatherApiClient");
+            var weatherServiceConfigOptions = serviceProvider.GetRequiredService<IOptions<TemperatureApi.Config.WeatherService.TemperatureApiWeatherServiceConfig>>();
+            return new GenericConfigurableWeatherApiClient(httpClient, weatherServiceConfigOptions);
+        });
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
